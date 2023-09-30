@@ -41,7 +41,6 @@ class Scout:
         self.speed = 1
         self.state = "up"
         self.moving = False
-        self.clicked_num = 0
         self.mouse_x = 0
         self.mouse_y = 0
         self.state_dict = {
@@ -86,13 +85,16 @@ class Scout:
 
     def clicked_on_unit(self):
         global selected_unit
-        if self.clicked_num == 0:
+        if selected_unit is None:
             selected_unit = self
-            self.clicked_num = 1
             self.moving = False
+
+        elif selected_unit is not None and self is not selected_unit:
+            selected_unit = None
+            selected_unit = self
+
         else:
             selected_unit = None
-            self.clicked_num = 0
 
     def place_on_screen(self):
         screen.blit(self.state_dict[self.state], self.rect)
@@ -166,7 +168,6 @@ while True:
         if unit is selected_unit:
             if selected_unit.moving:
                 selected_unit = None
-                unit.clicked_num = 0
             elif not selected_unit.moving:
                 pygame.draw.rect(screen, (255,255,255), selected_unit.rect)
         if unit.moving: # if scout.moving and selected_unit is not None and scout is selected_unit:
