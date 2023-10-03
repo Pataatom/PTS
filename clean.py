@@ -166,21 +166,45 @@ class Tree(pygame.sprite.Sprite):
             ]
         self.image = random.choice(tree_images)
         self.rect = self.image.get_rect(center=(place_x, place_y))
-
 # ____TREE____
+
+
+# ____BUILDINGS____
+class Building(pygame.sprite.Sprite):
+    def __init__(self, place_x, place_y, type):
+        super().__init__()
+        self.place_x = place_x
+        self.place_y = place_y
+        self.building_dict = {
+            "hq": pygame.image.load("my_shit/Buildings/HQ.png"),
+
+        }
+        self.image = self.building_dict[str(type)]
+        self.rect = self.image.get_rect(center=(place_x, place_y))
+
+
+# ____BUILDINGS____
 
 
 units.append(Lumber(500, 200))
 unit_bar = SomeBar()
 tree_group = pygame.sprite.Group()
+building_group = pygame.sprite.Group()
 
-# loading tree placement from file
+# init map from file
 with open("my_shit/Tree an nature/tree_placement.txt", "r") as file:
     for line in file:
         place_x, place_y = map(int, line.strip('()\n').split(', '))
         tree = Tree(place_x, place_y)
         tree_group.add(tree)
-# loading tree placement from file
+with open("my_shit/Buildings/building_placement.txt", "r") as file:
+    for line in file:
+        place_cord, type = line.split(" - ")
+        type = type.strip(" \n")
+        place_x, place_y = map(int, place_cord.strip("()\n").split(", "))
+        hq = Building(place_x, place_y, type)
+        building_group.add(hq)
+# init map placement from file
 
 while True:
 
@@ -220,6 +244,7 @@ while True:
     # ____WORLD____
     screen.fill((0, 100, 0))
     tree_group.draw(screen)
+    building_group.draw(screen)
     # ____WORLD____
 
     # ____UNITS_LOWER_MENU____
