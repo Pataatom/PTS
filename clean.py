@@ -175,13 +175,25 @@ class Building(pygame.sprite.Sprite):
         super().__init__()
         self.place_x = place_x
         self.place_y = place_y
+        self.type = type
         self.building_dict = {
             "hq": pygame.image.load("my_shit/Buildings/HQ.png"),
 
         }
         self.image = self.building_dict[str(type)]
         self.rect = self.image.get_rect(center=(place_x, place_y))
-
+        if self.type == "hq":
+            self.bay_1 = (self.rect.centerx - 15, self.rect.centery - 25)
+            self.bay_2 = (self.rect.centerx + 16, self.rect.centery - 25)
+            self.bay_3 = (self.rect.centerx - 15, self.rect.centery + 26)
+            self.bay_4 = (self.rect.centerx + 16, self.rect.centery + 26)
+            self.number_of_units_in_hq = 0
+            self.bay_dict = {
+                1: self.bay_1,
+                2: self.bay_2,
+                3: self.bay_3,
+                4: self.bay_4
+            }
 
 # ____BUILDINGS____
 
@@ -202,8 +214,8 @@ with open("my_shit/Buildings/building_placement.txt", "r") as file:
         place_cord, type = line.split(" - ")
         type = type.strip(" \n")
         place_x, place_y = map(int, place_cord.strip("()\n").split(", "))
-        hq = Building(place_x, place_y, type)
-        building_group.add(hq)
+        building = Building(place_x, place_y, type)
+        building_group.add(building)
 # init map placement from file
 
 while True:
@@ -213,7 +225,7 @@ while True:
             exit()
         if event.type == pygame.MOUSEBUTTONDOWN:
 
-            # selecting scout unit
+            # selecting unit
             # need to fix the issue when you have selected unit and click on another unit prbly some for loop
             # fckn redo this shit
             if units:
@@ -221,10 +233,18 @@ while True:
                     if unit.rect.collidepoint(event.pos):
                         unit.clicked_on_unit()
 
-                    elif not unit.rect.collidepoint(event.pos) and selected_unit == unit:
+                    elif not unit.rect.collidepoint(event.pos) and selected_unit == unit and not building.rect.\
+                            collidepoint(event.pos):
                         selected_unit.mouse_x, selected_unit.mouse_y = event.pos
                         selected_unit.moving = True
-            # selecting scout unit
+                    elif building.rect.collidepoint(event.pos) and selected_unit == unit:
+                        if building.type == "hq":
+                            if building.number_of_units_in_hq <= 4:
+                                building.number_of_units_in_hq += 1
+                                selected_unit.mouse_x, selected_unit.mouse_y = building.bay_dict[building.number_of_units_in_hq]
+                                print(place_x, place_y)
+                                selected_unit.moving = True
+            # selecting unit
 
             if unit_bar.scout_rect.collidepoint(event.pos):
                 unit_bar.scout_selected = True
@@ -243,7 +263,6 @@ while True:
 
     # ____WORLD____
     screen.fill((0, 100, 0))
-    tree_group.draw(screen)
     building_group.draw(screen)
     # ____WORLD____
 
@@ -255,23 +274,39 @@ while True:
 
     for unit in units:
 
+        if building.type == "hq":
+            pass
+
+        # checking for collision
         for standing_unit in units:
             if unit != standing_unit:
                 if unit.rect.colliderect(standing_unit.rect) and unit.moving:
                     unit.hit_something = True
                     backup_x, backup_y = unit.backup_from_hit("x"), unit.backup_from_hit("y")
+        # checking for collision
 
+        # selected unit stuff
         if unit is selected_unit:
             if selected_unit.moving:
                 selected_unit = None
             elif not selected_unit.moving:
                 pygame.draw.rect(screen, WHITE, selected_unit.rect)
+        # selected unit stuff
 
+        # moving unit to desired pos
         if unit.moving and not unit.hit_something:
             unit.auto_movement(unit.mouse_x, unit.mouse_y)
         elif unit.moving and unit.hit_something:
             unit.auto_movement(backup_x, backup_y)
         unit.place_on_screen()
+        # moving unit to desired pos
+
     # ____UNITS____
+
+    # ____SPRITE____
+    tree_group.draw(screen)
+
+    # ____SPRITE____
+
     pygame.display.flip()
     clock.tick(60)
