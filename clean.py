@@ -8,7 +8,7 @@ clock = pygame.time.Clock()
 units = []
 units_in_hq = []
 selected_unit = None
-scout_basic_image_path_01 = "my_shit/Units/Scout/pixil-frame-0 (1).png"
+scout_basic_image_path_01 = "my_shit/Units/Scout/scout_basic_1.png"
 lumber_basic_image_path_01 = "my_shit/Units/Lumber/Lumber Basic.png"
 WHITE = (255, 255, 255)
 # ____BASIC_SHIT____(VAR_INIT)
@@ -23,7 +23,7 @@ class SomeBar:
         self.color = (0, 0, 0)
         self.rect = pygame.Rect(self.x, self.y, width, height - self.height)
         # ____scout____
-        self.scout = pygame.image.load("my_shit/Units/Scout/pixil-frame-0 (1).png").convert_alpha()
+        self.scout = pygame.image.load(scout_basic_image_path_01).convert_alpha()
         self.scout_transformed = pygame.transform.scale2x(self.scout)
         self.scout_rect = self.scout_transformed.get_rect(topleft=(self.x + 10, self.y))
         self.scout_selected = False
