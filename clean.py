@@ -235,7 +235,7 @@ while True:
         if event.type == pygame.MOUSEBUTTONDOWN:
 
             # selecting unit
-            # need to fix the issue when you have selected unit and click on another unit prbly some for loop
+            # need to fix the issue when you have selected unit and click on another unit probably some for loop
             # fkn redo this shit
             if units:
                 for unit in units:

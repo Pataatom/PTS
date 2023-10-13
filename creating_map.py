@@ -27,6 +27,24 @@ class Tree(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=(place_x, place_y))
 
 
+class Rock(pygame.sprite.Sprite):
+    def __init__(self, place_x, place_y):
+        super().__init__()
+        self.place_x = place_x
+        self.place_y = place_y
+        normal_rock_list = [
+            pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_1.png").convert_alpha(),
+                                    random.randint(0, 355)),
+            pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_2.png").convert_alpha(),
+                                    random.randint(0, 355)),
+            pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_3.png").convert_alpha(),
+                                    random.randint(0, 355)),
+            pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_4.png").convert_alpha(),
+                                    random.randint(0, 355)),
+            pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_5.png").convert_alpha(),
+                                    random.randint(0, 355)),
+        ]
+
 class HQ(pygame.sprite.Sprite):
     def __init__(self, place_x, place_y):
         super().__init__()
@@ -54,14 +72,18 @@ while True:
         if event.type == pygame.QUIT:
             exit()
         if event.type == pygame.MOUSEBUTTONDOWN:
-            '''
-            place_x, place_y = event.pos
-            if not building_group:
-                hq = HQ(place_x, place_y)
-                building_group.add(hq)
-                with open("building_placement.txt", "a") as f:
-                    f .write(f"({place_x}, {place_y}) - hq \n")
-            '''
+            mouse_buttons_status = pygame.mouse.get_pressed(3)
+            left_mouse_button = mouse_buttons_status[0]
+            right_mouse_button = mouse_buttons_status[2]
+            if left_mouse_button:
+                '''
+                place_x, place_y = event.pos
+                if not building_group:
+                    hq = HQ(place_x, place_y)
+                    building_group.add(hq)
+                    with open("building_placement.txt", "a") as f:
+                        f .write(f"({place_x}, {place_y}) - hq \n")
+                '''
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
                 with open("my_shit/Tree an nature/tree_placement.txt", "r") as file:
