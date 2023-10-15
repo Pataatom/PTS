@@ -28,22 +28,45 @@ class Tree(pygame.sprite.Sprite):
 
 
 class Rock(pygame.sprite.Sprite):
-    def __init__(self, place_x, place_y):
+    def __init__(self, place_x, place_y, key):
         super().__init__()
         self.place_x = place_x
         self.place_y = place_y
-        normal_rock_list = [
-            pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_1.png").convert_alpha(),
-                                    random.randint(0, 355)),
-            pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_2.png").convert_alpha(),
-                                    random.randint(0, 355)),
-            pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_3.png").convert_alpha(),
-                                    random.randint(0, 355)),
-            pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_4.png").convert_alpha(),
-                                    random.randint(0, 355)),
-            pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_5.png").convert_alpha(),
-                                    random.randint(0, 355)),
-        ]
+        self.type_of_rock = key
+        if key == 1:
+
+            normal_rock_list = [
+                pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_1.png").convert_alpha(),
+                                        random.randint(0, 355)),
+                pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_2.png").convert_alpha(),
+                                        random.randint(0, 355)),
+                pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_3.png").convert_alpha(),
+                                        random.randint(0, 355)),
+                pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_4.png").convert_alpha(),
+                                        random.randint(0, 355)),
+                pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_5.png").convert_alpha(),
+                                        random.randint(0, 355)),
+            ]
+            self.image = random.choice(normal_rock_list)
+            self.rect = self.image.get_rect(center=(place_x, place_y))
+        elif key == 2:
+            steel_rock_list = [
+                pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/steel_rock/steel_rock_1.png").convert_alpha(),
+                                        random.randint(0, 355)),
+                pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/steel_rock/steel_rock_2.png").convert_alpha(),
+                                        random.randint(0, 355))
+            ]
+            self.image = random.choice(steel_rock_list)
+            self.rect = self.image.get_rect(center=(place_x, place_y))
+        elif key == 3:
+            gold_rock_list = [
+                pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/gold_rocks/gold_rock_1.png").convert_alpha(),
+                                        random.randint(0, 355))
+            ]
+            self.image = random.choice(gold_rock_list)
+            self.rect = self.image.get_rect(center=(place_x, place_y))
+
+
 
 class HQ(pygame.sprite.Sprite):
     def __init__(self, place_x, place_y):
@@ -54,8 +77,7 @@ class HQ(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=(place_x, place_y))
 
 
-
-
+rock_group = pygame.sprite.Group()
 tree_group = pygame.sprite.Group()
 building_group = pygame.sprite.Group()
 '''
@@ -71,11 +93,21 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             exit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_1:
+                type_of_rock = 1
+            elif event.key == pygame.K_2:
+                type_of_rock = 2
+            elif event.key == pygame.K_3:
+                type_of_rock = 3
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouse_buttons_status = pygame.mouse.get_pressed(3)
             left_mouse_button = mouse_buttons_status[0]
             right_mouse_button = mouse_buttons_status[2]
-            if left_mouse_button:
+            if left_mouse_button and type_of_rock:
+                place_x, place_y = event.pos
+                rock = Rock(place_x, place_y, type_of_rock)
+                rock_group.add()
                 '''
                 place_x, place_y = event.pos
                 if not building_group:
