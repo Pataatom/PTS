@@ -4,6 +4,12 @@ pygame.init()
 width, height = 1000, 700
 screen = pygame.display.set_mode((width, height))
 clock = pygame.time.Clock()
+type_of_rock = 0
+type_of_rock_dict = {
+    1: "normal_rock",
+    2: "steel_rock",
+    3: "gold_rock",
+}
 
 
 class Tree(pygame.sprite.Sprite):
@@ -104,10 +110,12 @@ while True:
             mouse_buttons_status = pygame.mouse.get_pressed(3)
             left_mouse_button = mouse_buttons_status[0]
             right_mouse_button = mouse_buttons_status[2]
-            if left_mouse_button and type_of_rock:
+            if left_mouse_button and type_of_rock != 0:
                 place_x, place_y = event.pos
                 rock = Rock(place_x, place_y, type_of_rock)
-                rock_group.add()
+                rock_group.add(rock)
+                with open("my_shit/Tree an nature/rock_placement.txt", "a") as file:
+                    file.write(f"({place_x}, {place_y}) - {type_of_rock_dict[type_of_rock]} \n")
                 '''
                 place_x, place_y = event.pos
                 if not building_group:
@@ -133,6 +141,7 @@ while True:
 
     screen.fill((0, 100, 0))
     tree_group.draw(screen)
+    rock_group.draw(screen)
     building_group.draw(screen)
     pygame.display.flip()
     clock.tick(60)
