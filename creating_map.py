@@ -116,6 +116,20 @@ while True:
                 rock_group.add(rock)
                 with open("my_shit/Tree an nature/rock_placement.txt", "a") as file:
                     file.write(f"({place_x}, {place_y}) - {type_of_rock_dict[type_of_rock]} \n")
+            for tree in tree_group:
+                if right_mouse_button and tree.rect.collidepoint(event.pos):
+                    place_x, place_y = tree.rect.centerx, tree.rect.centery
+                    list_of_trees = open("my_shit/Tree an nature/tree_placement.txt").readlines()
+                    list_of_trees.remove(f"({place_x}, {place_y})\n")
+
+
+                    '''
+                    with open("my_shit/Tree an nature/tree_placement.txt", "r") as f:
+                        list_of_trees = f.readlines()
+                        list_of_trees.remove(f"({place_x}, {place_y})\n")
+                        print(list_of_trees)
+                    '''
+
                 '''
                 place_x, place_y = event.pos
                 if not building_group:
