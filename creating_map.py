@@ -114,13 +114,36 @@ while True:
                 place_x, place_y = event.pos
                 rock = Rock(place_x, place_y, type_of_rock)
                 rock_group.add(rock)
-                with open("my_shit/Tree an nature/rock_placement.txt", "a") as file:
+                with open("my_shit/Rocks/rock_placement.txt", "a") as file:
                     file.write(f"({place_x}, {place_y}) - {type_of_rock_dict[type_of_rock]} \n")
+
             for tree in tree_group:
                 if right_mouse_button and tree.rect.collidepoint(event.pos):
                     place_x, place_y = tree.rect.centerx, tree.rect.centery
                     list_of_trees = open("my_shit/Tree an nature/tree_placement.txt").readlines()
+                    tree_group.remove(tree)
+                    if f"({place_x}, {place_y})\n" in list_of_trees:
+                        print("found it")
                     list_of_trees.remove(f"({place_x}, {place_y})\n")
+                    with open(r"my_shit/Tree an nature/tree_placement.txt", "w") as f:
+                        for x in list_of_trees:
+                            f.write(x)
+                        f.close()
+            # rock removal
+            for rock in rock_group:
+                if right_mouse_button and rock.rect.collidepoint(event.pos):
+                    place_x, place_y = rock.rect.centerx, rock.rect.centery
+                    key = rock.type_of_rock
+                    list_of_rocks = open("my_shit/Rocks/rock_placement.txt", "r").readlines()
+                    # rock_group.remove(rock)
+                    if f"({place_x}, {place_y}) - {type_of_rock_dict[key]}\n" in list_of_rocks:
+                        # print("found it")
+                        list_of_rocks.remove(f"({place_x}, {place_y} - {type_of_rock_dict[key]})\n")
+                    with open(r"my_shit/Tree an nature/tree_placement.txt", "w") as f:
+                        for x in list_of_rocks:
+                            f.write(x)
+                        f.close()
+
 
 
                     '''
