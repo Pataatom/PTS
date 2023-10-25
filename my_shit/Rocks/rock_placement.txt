@@ -1,3 +1,0 @@
-(611, 554) - normal_rock 
-(543, 560) - normal_rock 
-(468, 572) - normal_rock 

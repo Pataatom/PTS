@@ -5,11 +5,6 @@ width, height = 1000, 700
 screen = pygame.display.set_mode((width, height))
 clock = pygame.time.Clock()
 type_of_rock = 0
-type_of_rock_dict = {
-    1: "normal_rock",
-    2: "steel_rock",
-    3: "gold_rock",
-}
 
 
 class Tree(pygame.sprite.Sprite):
@@ -34,12 +29,15 @@ class Tree(pygame.sprite.Sprite):
 
 
 class Rock(pygame.sprite.Sprite):
-    def __init__(self, place_x, place_y, key):
+    def __init__(self, place_x, place_y, type):
+        # 1 = Normal rock
+        # 2 = Steel rock
+        # 3 = Gold rock
         super().__init__()
         self.place_x = place_x
         self.place_y = place_y
-        self.type_of_rock = key
-        if key == 1:
+        self.type = type
+        if type == 1:
 
             normal_rock_list = [
                 pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_1.png").convert_alpha(),
@@ -55,7 +53,7 @@ class Rock(pygame.sprite.Sprite):
             ]
             self.image = random.choice(normal_rock_list)
             self.rect = self.image.get_rect(center=(place_x, place_y))
-        elif key == 2:
+        elif type == 2:
             steel_rock_list = [
                 pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/steel_rock/steel_rock_1.png").convert_alpha(),
                                         random.randint(0, 355)),
@@ -64,14 +62,12 @@ class Rock(pygame.sprite.Sprite):
             ]
             self.image = random.choice(steel_rock_list)
             self.rect = self.image.get_rect(center=(place_x, place_y))
-        elif key == 3:
+        elif type == 3:
             gold_rock_list = [
                 pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/gold_rocks/gold_rock_1.png").convert_alpha(),
                                         random.randint(0, 355))
             ]
             self.image = random.choice(gold_rock_list)
-            self.rect = self.image.get_rect(center=(place_x, place_y))
-
 
 
 class HQ(pygame.sprite.Sprite):
@@ -107,42 +103,44 @@ while True:
             elif event.key == pygame.K_3:
                 type_of_rock = 3
         if event.type == pygame.MOUSEBUTTONDOWN:
+            # mapping the mouse buttons
             mouse_buttons_status = pygame.mouse.get_pressed(3)
             left_mouse_button = mouse_buttons_status[0]
             right_mouse_button = mouse_buttons_status[2]
+
             if left_mouse_button and type_of_rock != 0:
                 place_x, place_y = event.pos
                 rock = Rock(place_x, place_y, type_of_rock)
                 rock_group.add(rock)
                 with open("my_shit/Rocks/rock_placement.txt", "a") as file:
-                    file.write(f"({place_x}, {place_y}) - {type_of_rock_dict[type_of_rock]} \n")
+                    file.write(f"({place_x}, {place_y}) - {type_of_rock} \n")
+            if right_mouse_button:
+                # tree removal
+                for tree in tree_group:
+                    if tree.rect.collidepoint(event.pos):
+                        place_x, place_y = tree.rect.centerx, tree.rect.centery
+                        list_of_trees = open("my_shit/Tree an nature/tree_placement.txt").readlines()
+                        tree_group.remove(tree)
+                        if f"({place_x}, {place_y})\n" in list_of_trees:
+                            list_of_trees.remove(f"({place_x}, {place_y})\n")
+                            with open(r"my_shit/Tree an nature/tree_placement.txt", "w") as f:
+                                for x in list_of_trees:
+                                    f.write(x)
+                                    f.close()
 
-            for tree in tree_group:
-                if right_mouse_button and tree.rect.collidepoint(event.pos):
-                    place_x, place_y = tree.rect.centerx, tree.rect.centery
-                    list_of_trees = open("my_shit/Tree an nature/tree_placement.txt").readlines()
-                    tree_group.remove(tree)
-                    if f"({place_x}, {place_y})\n" in list_of_trees:
-                        print("found it")
-                    list_of_trees.remove(f"({place_x}, {place_y})\n")
-                    with open(r"my_shit/Tree an nature/tree_placement.txt", "w") as f:
-                        for x in list_of_trees:
-                            f.write(x)
-                        f.close()
-            # rock removal
-            for rock in rock_group:
-                if right_mouse_button and rock.rect.collidepoint(event.pos):
-                    place_x, place_y = rock.rect.centerx, rock.rect.centery
-                    key = rock.type_of_rock
-                    list_of_rocks = open("my_shit/Rocks/rock_placement.txt", "r").readlines()
-                    # rock_group.remove(rock)
-                    if f"({place_x}, {place_y}) - {type_of_rock_dict[key]}\n" in list_of_rocks:
-                        # print("found it")
-                        list_of_rocks.remove(f"({place_x}, {place_y} - {type_of_rock_dict[key]})\n")
-                    with open(r"my_shit/Tree an nature/tree_placement.txt", "w") as f:
-                        for x in list_of_rocks:
-                            f.write(x)
-                        f.close()
+                # rock removal
+                for rock in rock_group:
+                    if rock.rect.collidepoint(event.pos):
+                        place_x, place_y = rock.rect.centerx, rock.rect.centery
+                        key = rock.type
+                        list_of_rocks = open("my_shit/Rocks/rock_placement.txt", "r").readlines()
+                        rock_group.remove(rock)
+                        if f"({place_x}, {place_y}) - {key}\n" in list_of_rocks:
+                            list_of_rocks.remove(f"({place_x}, {place_y} - {key})\n")
+                            with open(r"my_shit/Tree an nature/rock_placement.txt", "w") as f:
+                                for x in list_of_rocks:
+                                    f.write(x)
+                                    f.close()
 
 
 
@@ -174,7 +172,12 @@ while True:
                         place_x, place_y = map(int, place_cord.strip("()\n").split(", "))
                         hq = HQ(place_x, place_y)
                         building_group.add(hq)
-
+                with open("my_shit/Rocks/rock_placement.txt", "r") as file:
+                    for line in file:
+                        place_cord, type = line.split(" - ")
+                        place_x, place_y = map(int, place_cord.strip("()\n").split(", "))
+                        rock = Rock(place_x, place_y, type)
+                        rock_group.add(rock)
 
     screen.fill((0, 100, 0))
     tree_group.draw(screen)
