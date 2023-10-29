@@ -64,11 +64,15 @@ while True:
             exit()
     screen.fill((0, 100, 0))
     # jk
-    rock = NormalRock(random.randint(0, width), random.randint(0, height))
-    normal_rock_group.add(rock)
+
     tree = Tree(random.randint(0, width), random.randint(0, height))
     tree_group.add(tree)
     # jk
+    if len(tree_group) % 5 == 0:
+        rock = NormalRock(random.randint(0, width), random.randint(0, height))
+        normal_rock_group.add(rock)
+
     normal_rock_group.draw(screen)
+    tree_group.draw(screen)
     pygame.display.flip()
-    clock.tick(60)
+    clock.tick(10)
