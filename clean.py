@@ -72,7 +72,7 @@ class Scout:
             elif self.rect.centery < target_y:
                 self.rect.centery += self.speed
                 self.state = "down"
-        elif abs(target_x - self.rect.centerx) > abs(target_y - self.rect.centery):
+        elif distance_x > distance_y:
             if self.rect.centery > target_y:
                 self.rect.centery -= self.speed
                 self.state = "up"
