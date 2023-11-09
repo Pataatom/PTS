@@ -51,8 +51,8 @@ class SomeBar:
 
     def draw_unit_bar(self):
         pygame.draw.rect(screen, self.color, self.rect)
-        if unit_bar.scout_selected:
-            pygame.draw.rect(screen, (255, 255, 255), unit_bar.scout_rect)
+        if self.scout_selected:
+            pygame.draw.rect(screen, (255, 255, 255), self.scout_rect)
         screen.blit(self.scout_transformed, self.scout_rect)
 # ____UNITS_BUILDING_AND_SHIT_MENU____
 
