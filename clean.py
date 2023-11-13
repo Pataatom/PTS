@@ -1,5 +1,6 @@
 import pygame
 import random
+
 # ____BASIC_SHIT____(VAR_INIT)
 pygame.init()
 width, height = 1000, 700
@@ -76,7 +77,7 @@ class Scout:
             "right": pygame.transform.rotate(self.image, 270)
         }
 
-    def auto_movement(self, target_x, target_y, first_axis):
+    def auto_movement(self, target_x, target_y, first_axis = "x"):
         global selected_unit
         if first_axis == "x":
             if self.rect.centerx > target_x:

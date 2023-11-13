@@ -1,5 +1,6 @@
 import pygame
 import random
+
 pygame.init()
 width, height = 1200, 700
 screen = pygame.display.set_mode((width, height))
@@ -14,8 +15,7 @@ class SomeBar:
         self.rect = pygame.Rect(self.x, self.y, width, height - self.height)
         # ____tree____
         self.tree = pygame.image.load(r"my_shit/Tree an nature/tree_1.png").convert_alpha()
-        self.tree_transformed = self.tree
-        self.tree_rect = self.tree_transformed.get_rect(topleft=(self.x + 10, self.y))
+        self.tree_rect = self.tree.get_rect(topleft=(self.x + 10, self.y))
         self.tree_selected = False
         # ____tree____
 
@@ -23,7 +23,8 @@ class SomeBar:
         pygame.draw.rect(screen, self.color, self.rect)
         if self.tree_selected:
             pygame.draw.rect(screen, (255, 255, 255), self.tree_rect)
-        screen.blit(self.tree_transformed, self.tree_rect)
+        screen.blit(self.tree, self.tree_rect)
+
 
 class Tree(pygame.sprite.Sprite):
     def __init__(self, place_x, place_y):
@@ -82,7 +83,38 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             exit()
-    screen.fill((0, 100, 0))
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if placing_bar.tree_rect.collidepoint(event.pos):
+                placing_bar.tree_selected = True
+
+            # this needs fixing
+            if tree_group:
+                for tree in tree_group:
+                    if placing_bar.tree_selected and not placing_bar.rect.collidepoint(event.pos)\
+                            and not tree.rect.collidepoint(event.pos):
+                        print("I got here")
+                        x, y = event.pos
+                        new_tree = Tree(x, y)
+                        tree_group.add(new_tree)
+                        placing_bar.tree_selected = False
+
+                    # it strangly works without this one, but that one tree is weirdly twinkling
+                    elif placing_bar.rect.collidepoint(event.pos)\
+                            or tree.rect.collidepoint(event.pos):
+                        placing_bar.tree_selected = False
+                    '''
+                    else:
+                        placing_bar.tree_selected = False
+                    '''
+            else:
+                if placing_bar.tree_selected and not placing_bar.rect.collidepoint(event.pos):
+                    x, y = event.pos
+                    new_tree = Tree(x, y)
+                    tree_group.add(new_tree)
+                    placing_bar.tree_selected = False
+            # this needs fixing
+
+        screen.fill((0, 100, 0))
 
     # jk
     '''
@@ -96,5 +128,5 @@ while True:
     normal_rock_group.draw(screen)
     tree_group.draw(screen)
     placing_bar.draw_placing_bar()
-    pygame.display.flip()
-    clock.tick(10)
+    pygame.display.update()
+    clock.tick(60)
