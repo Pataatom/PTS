@@ -1,6 +1,6 @@
 import pygame
 import random
-
+import time
 pygame.init()
 width, height = 1200, 700
 screen = pygame.display.set_mode((width, height))
@@ -88,33 +88,16 @@ while True:
                 placing_bar.tree_selected = True
 
             # this needs fixing
-            if tree_group:
-                for tree in tree_group:
-                    if placing_bar.tree_selected and not placing_bar.rect.collidepoint(event.pos)\
-                            and not tree.rect.collidepoint(event.pos):
-                        print("I got here")
-                        x, y = event.pos
-                        new_tree = Tree(x, y)
-                        tree_group.add(new_tree)
-                        placing_bar.tree_selected = False
-
-                    # it strangly works without this one, but that one tree is weirdly twinkling
-                    elif placing_bar.rect.collidepoint(event.pos)\
-                            or tree.rect.collidepoint(event.pos):
-                        placing_bar.tree_selected = False
-                    '''
-                    else:
-                        placing_bar.tree_selected = False
-                    '''
-            else:
-                if placing_bar.tree_selected and not placing_bar.rect.collidepoint(event.pos):
-                    x, y = event.pos
-                    new_tree = Tree(x, y)
-                    tree_group.add(new_tree)
+            elif placing_bar.tree_selected:
+                if placing_bar.rect.collidepoint(event.pos) or placing_bar.tree_rect.collidepoint(event.pos):
                     placing_bar.tree_selected = False
+                else:
+                    x, y = event.pos
+                    tree = Tree(x, y)
+                    tree_group.add(tree)
             # this needs fixing
 
-        screen.fill((0, 100, 0))
+    screen.fill((0, 100, 0))
 
     # jk
     '''
@@ -125,8 +108,8 @@ while True:
         normal_rock_group.add(rock)
     '''
     # jk
-    normal_rock_group.draw(screen)
+    #normal_rock_group.draw(screen)
     tree_group.draw(screen)
     placing_bar.draw_placing_bar()
-    pygame.display.update()
+    pygame.display.flip()
     clock.tick(60)
