@@ -83,7 +83,46 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             exit()
+
+        # downloading and uploading changes in environment
+        if event.type == pygame.KEYDOWN:
+
+
+            # uploading
+            if event.key == pygame.K_DOWN:
+                with open("test_tree.txt", "w") as f:
+                    for tree in tree_group:
+                            f.write(f"{tree.place_x, tree.place_y}\n") # I just find out that if you write it like this
+                            # it takes it like tuple
+        # downloading and uploading changes in environment
+            # uploading
+
+
+            if event.key == pygame.K_UP:
+                tree_group.empty()
+                with open("test_tree.txt", "r") as f:
+                    for line in f:
+                        place_x, place_y = map(int, line.strip('()\n').split(', '))
+                        tree = Tree(place_x, place_y)
+                        tree_group.add(tree)
+
+
         if event.type == pygame.MOUSEBUTTONDOWN:
+
+            # mapping the mouse buttons
+            mouse_buttons_status = pygame.mouse.get_pressed(3)
+            left_mouse_button = mouse_buttons_status[0]
+            right_mouse_button = mouse_buttons_status[2]
+            # mapping the mouse buttons
+
+            if right_mouse_button:
+                print("right_button")
+            '''
+            for tree in tree_group:
+                if tree.rect.collidepoint(event.pos):
+                    pass
+            '''
+
             if placing_bar.tree_rect.collidepoint(event.pos):
                 placing_bar.tree_selected = True
 
