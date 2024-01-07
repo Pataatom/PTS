@@ -11,7 +11,7 @@ class SomeBar:
         self.height = 45
         self.x = 0
         self.y = height - self.height
-        self.color = (0, 0, 0)
+        self.color = (57, 60, 61)
         self.rect = pygame.Rect(self.x, self.y, width, height - self.height)
         # ____tree____
         self.tree = pygame.image.load(r"my_shit/Tree an nature/tree_1.png").convert_alpha()
@@ -19,11 +19,21 @@ class SomeBar:
         self.tree_selected = False
         # ____tree____
 
+        # ____normal_rock____
+        self.normal_rock = pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_1.png").convert_alpha()
+        self.normal_rock_rect = self.normal_rock.get_rect(topleft=(self.x + 20 + self.tree_rect.width, self.y))
+        self.normal_rock_selected = False
+        # ____normal_rock____
+
+
     def draw_placing_bar(self):
         pygame.draw.rect(screen, self.color, self.rect)
         if self.tree_selected:
             pygame.draw.rect(screen, (255, 255, 255), self.tree_rect)
+        elif self.normal_rock_selected:
+            pygame.draw.rect(screen, (255, 255, 255), self.normal_rock_rect)
         screen.blit(self.tree, self.tree_rect)
+        screen.blit(self.normal_rock, self.normal_rock_rect)
 
 
 class Tree(pygame.sprite.Sprite):
@@ -87,17 +97,22 @@ while True:
         # downloading and uploading changes in environment
         if event.type == pygame.KEYDOWN:
 
+            # clearing the workplace
+            if event.key == pygame.K_DELETE:
+                for tree in tree_group:
+                    tree_group.remove(tree)
+                for rock in normal_rock_group:
+                    normal_rock_group.remove(rock)
+            # clearing the workplace
 
-            # uploading
+            # downloading
             if event.key == pygame.K_DOWN:
                 with open("test_tree.txt", "w") as f:
                     for tree in tree_group:
                             f.write(f"{tree.place_x, tree.place_y}\n") # I just find out that if you write it like this
                             # it takes it like tuple
-        # downloading and uploading changes in environment
+
             # uploading
-
-
             if event.key == pygame.K_UP:
                 tree_group.empty()
                 with open("test_tree.txt", "r") as f:
@@ -105,7 +120,8 @@ while True:
                         place_x, place_y = map(int, line.strip('()\n').split(', '))
                         tree = Tree(place_x, place_y)
                         tree_group.add(tree)
-
+            # uploading
+        # downloading and uploading changes in environment
 
         if event.type == pygame.MOUSEBUTTONDOWN:
 
@@ -116,25 +132,22 @@ while True:
             # mapping the mouse buttons
 
             if right_mouse_button:
-                print("right_button")
-            '''
-            for tree in tree_group:
-                if tree.rect.collidepoint(event.pos):
-                    pass
-            '''
+                print(f"removed:{event.pos}")
+                for tree in tree_group:
+                    if tree.rect.collidepoint(event.pos):
+                        tree_group.remove(tree)
 
-            if placing_bar.tree_rect.collidepoint(event.pos):
-                placing_bar.tree_selected = True
-
-            # this needs fixing
-            elif placing_bar.tree_selected:
+            # placing trees
+            if placing_bar.tree_selected:
                 if placing_bar.rect.collidepoint(event.pos) or placing_bar.tree_rect.collidepoint(event.pos):
                     placing_bar.tree_selected = False
-                else:
+                elif left_mouse_button:
                     x, y = event.pos
                     tree = Tree(x, y)
                     tree_group.add(tree)
-            # this needs fixing
+            elif placing_bar.tree_rect.collidepoint(event.pos):
+                placing_bar.tree_selected = True
+            # placing trees
 
     screen.fill((0, 100, 0))
 
