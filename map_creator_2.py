@@ -6,6 +6,37 @@ width, height = 1200, 700
 screen = pygame.display.set_mode((width, height))
 clock = pygame.time.Clock()
 
+
+class Maintenance:
+    @staticmethod
+    def clear():
+        for tree in tree_group:
+            tree_group.remove(tree)
+        for rock in normal_rock_group:
+            normal_rock_group.remove(rock)
+    @staticmethod
+    def load():
+        tree_group.empty()
+        normal_rock_group.empty()
+        with open("test_tree.txt", "r") as f:
+            for line in f:
+                place_x, place_y = map(int, line.strip('()\n').split(', '))
+                tree = Tree(place_x, place_y)
+                tree_group.add(tree)
+        with open("test_normal_rock.txt", "r") as f:
+            for line in f:
+                place_x, place_y = map(int, line.strip('()\n').split(', '))
+                rock = NormalRock(place_x, place_y)
+                normal_rock_group.add(rock)
+    @staticmethod
+    def save():
+        with open("test_tree.txt", "w") as f:
+            for tree in tree_group:
+                f.write(f"{tree.place_x, tree.place_y}\n")
+        with open("test_normal_rock.txt", "w") as f:
+            for rock in normal_rock_group:
+                f.write(f"{rock.place_x, rock.place_y}\n")
+
 class SomeBar:
     def __init__(self):
         self.height = 45
@@ -88,7 +119,7 @@ class NormalRock(pygame.sprite.Sprite):
 
 normal_rock_group = pygame.sprite.Group()
 tree_group = pygame.sprite.Group()
-placing_bar = SomeBar()
+placing_bar = SomeBar() #object of class Some bar
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -99,27 +130,17 @@ while True:
 
             # clearing the workplace
             if event.key == pygame.K_DELETE:
-                for tree in tree_group:
-                    tree_group.remove(tree)
-                for rock in normal_rock_group:
-                    normal_rock_group.remove(rock)
+                Maintenance.clear()
             # clearing the workplace
 
             # downloading
             if event.key == pygame.K_DOWN:
-                with open("test_tree.txt", "w") as f:
-                    for tree in tree_group:
-                            f.write(f"{tree.place_x, tree.place_y}\n") # I just find out that if you write it like this
-                            # it takes it like tuple
+                Maintenance.save()
+            # downloading
 
             # uploading
             if event.key == pygame.K_UP:
-                tree_group.empty()
-                with open("test_tree.txt", "r") as f:
-                    for line in f:
-                        place_x, place_y = map(int, line.strip('()\n').split(', '))
-                        tree = Tree(place_x, place_y)
-                        tree_group.add(tree)
+                Maintenance.load()
             # uploading
         # downloading and uploading changes in environment
 
@@ -132,10 +153,12 @@ while True:
             # mapping the mouse buttons
 
             if right_mouse_button:
-                print(f"removed:{event.pos}")
                 for tree in tree_group:
                     if tree.rect.collidepoint(event.pos):
                         tree_group.remove(tree)
+                for rock in normal_rock_group:
+                    if rock.rect.collidepoint(event.pos):
+                        normal_rock_group.remove(rock)
 
             # placing trees
             if placing_bar.tree_selected:
@@ -149,6 +172,18 @@ while True:
                 placing_bar.tree_selected = True
             # placing trees
 
+            # placing normal_rocks
+            if placing_bar.normal_rock_selected:
+                if placing_bar.rect.collidepoint(event.pos) or placing_bar.normal_rock_rect.collidepoint(event.pos):
+                    placing_bar.normal_rock_selected = False
+                elif left_mouse_button:
+                    x, y = event.pos
+                    normal_rock = NormalRock(x, y)
+                    normal_rock_group.add(normal_rock)
+            elif placing_bar.normal_rock_rect.collidepoint(event.pos):
+                placing_bar.normal_rock_selected = True
+            # placing normal_rocks
+
     screen.fill((0, 100, 0))
 
     # jk
@@ -160,7 +195,7 @@ while True:
         normal_rock_group.add(rock)
     '''
     # jk
-    #normal_rock_group.draw(screen)
+    normal_rock_group.draw(screen)
     tree_group.draw(screen)
     placing_bar.draw_placing_bar()
     pygame.display.flip()
