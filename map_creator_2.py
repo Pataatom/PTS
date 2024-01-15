@@ -125,7 +125,7 @@ while True:
         if event.type == pygame.QUIT:
             exit()
 
-        # downloading and uploading changes in environment
+        # changes in environment
         if event.type == pygame.KEYDOWN:
 
             # clearing the workplace
@@ -133,16 +133,16 @@ while True:
                 Maintenance.clear()
             # clearing the workplace
 
-            # downloading
+            # saving
             if event.key == pygame.K_DOWN:
                 Maintenance.save()
-            # downloading
+            # saving
 
-            # uploading
+            # loading
             if event.key == pygame.K_UP:
                 Maintenance.load()
-            # uploading
-        # downloading and uploading changes in environment
+            # loading
+        # changes in environment
 
         if event.type == pygame.MOUSEBUTTONDOWN:
 
