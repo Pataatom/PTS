@@ -12,30 +12,38 @@ class Maintenance:
     def clear():
         for tree in tree_group:
             tree_group.remove(tree)
-        for rock in normal_rock_group:
-            normal_rock_group.remove(rock)
+        for rock in rock_group:
+            rock_group.remove(rock)
     @staticmethod
     def load():
         tree_group.empty()
-        normal_rock_group.empty()
-        with open("test_tree.txt", "r") as f:
+        rock_group.empty()
+        with open("my_shit/Tree an nature/tree_placement.txt", "r") as f:
             for line in f:
                 place_x, place_y = map(int, line.strip('()\n').split(', '))
                 tree = Tree(place_x, place_y)
                 tree_group.add(tree)
-        with open("test_normal_rock.txt", "r") as f:
+        with open("my_shit/Rocks/rock_placement.txt", "r") as f:
             for line in f:
                 place_x, place_y = map(int, line.strip('()\n').split(', '))
                 rock = NormalRock(place_x, place_y)
-                normal_rock_group.add(rock)
+                rock_group.add(rock)
     @staticmethod
     def save():
-        with open("test_tree.txt", "w") as f:
+        with open("my_shit/Tree an nature/tree_placement.txt", "w") as f:
             for tree in tree_group:
                 f.write(f"{tree.place_x, tree.place_y}\n")
-        with open("test_normal_rock.txt", "w") as f:
-            for rock in normal_rock_group:
+        with open("my_shit/Rocks/rock_placement.txt", "w") as f:
+            for rock in rock_group:
                 f.write(f"{rock.place_x, rock.place_y}\n")
+
+            ''' maybe someday
+            for type in ("normal", "iron", "gold"):
+                with open(f"test_{type}_rock.txt", "w") as f:
+                    for rock in rock_group:
+                        if rock.type == f"{type}":
+                            f.write(f"{rock.place_x, rock.place_y}\n")
+            '''
 
 class SomeBar:
     def __init__(self):
@@ -100,6 +108,7 @@ class HQ(pygame.sprite.Sprite):
 class NormalRock(pygame.sprite.Sprite):
     def __init__(self, place_x, place_y):
         super().__init__()
+        self.type = "normal"
         self.place_x = place_x
         self.place_y = place_y
         self.normal_rock_list = [
@@ -117,7 +126,7 @@ class NormalRock(pygame.sprite.Sprite):
         self.image = random.choice(self.normal_rock_list)
         self.rect = self.image.get_rect(center=(place_x, place_y))
 
-normal_rock_group = pygame.sprite.Group()
+rock_group = pygame.sprite.Group()
 tree_group = pygame.sprite.Group()
 placing_bar = SomeBar() #object of class Some bar
 while True:
@@ -156,9 +165,9 @@ while True:
                 for tree in tree_group:
                     if tree.rect.collidepoint(event.pos):
                         tree_group.remove(tree)
-                for rock in normal_rock_group:
+                for rock in rock_group:
                     if rock.rect.collidepoint(event.pos):
-                        normal_rock_group.remove(rock)
+                        rock_group.remove(rock)
 
             # placing trees
             if placing_bar.tree_selected:
@@ -179,7 +188,7 @@ while True:
                 elif left_mouse_button:
                     x, y = event.pos
                     normal_rock = NormalRock(x, y)
-                    normal_rock_group.add(normal_rock)
+                    rock_group.add(normal_rock)
             elif placing_bar.normal_rock_rect.collidepoint(event.pos):
                 placing_bar.normal_rock_selected = True
             # placing normal_rocks
@@ -195,7 +204,7 @@ while True:
         normal_rock_group.add(rock)
     '''
     # jk
-    normal_rock_group.draw(screen)
+    rock_group.draw(screen)
     tree_group.draw(screen)
     placing_bar.draw_placing_bar()
     pygame.display.flip()

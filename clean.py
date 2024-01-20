@@ -3,7 +3,7 @@ import random
 
 # ____BASIC_SHIT____(VAR_INIT)
 pygame.init()
-width, height = 1000, 700
+width, height = 1200, 700
 screen = pygame.display.set_mode((width, height))
 clock = pygame.time.Clock()
 units = []
@@ -14,6 +14,7 @@ lumber_basic_image_path_01 = "my_shit/Units/Lumber/Lumber Basic.png"
 WHITE = (255, 255, 255)
 # groups
 tree_group = pygame.sprite.Group()
+rock_group = pygame.sprite.Group()
 buildings_group = pygame.sprite.Group()
 # groups
 
@@ -26,6 +27,11 @@ def load_map():
             place_x, place_y = map(int, line.strip('()\n').split(', '))
             tree = Tree(place_x, place_y)
             tree_group.add(tree)
+    with open("my_shit/Rocks/rock_placement.txt", "r") as file:
+        for line in file:
+            place_x, place_y = map(int, line.strip('()\n').split(', '))
+            rock = NormalRock(place_x, place_y)
+            tree_group.add(rock)
     with open("my_shit/Buildings/building_placement.txt", "r") as file:
         for line in file:
             place_cord, type_of_building = line.split(" - ")
@@ -193,6 +199,30 @@ class Tree(pygame.sprite.Sprite):
 # ____TREE____
 
 
+# ____ROCK____
+class NormalRock(pygame.sprite.Sprite):
+    def __init__(self, place_x, place_y):
+        super().__init__()
+        self.type = "normal"
+        self.place_x = place_x
+        self.place_y = place_y
+        self.normal_rock_list = [
+            pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_1.png").convert_alpha(),
+                                    random.randint(0, 355)),
+            pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_2.png").convert_alpha(),
+                                    random.randint(0, 355)),
+            pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_3.png").convert_alpha(),
+                                    random.randint(0, 355)),
+            pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_4.png").convert_alpha(),
+                                    random.randint(0, 355)),
+            pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_5.png").convert_alpha(),
+                                    random.randint(0, 355)),
+            ]
+        self.image = random.choice(self.normal_rock_list)
+        self.rect = self.image.get_rect(center=(place_x, place_y))
+# ____ROCK____
+
+
 # ____BUILDINGS____
 class Building(pygame.sprite.Sprite):
     def __init__(self, building_x, building_y, type_of_unit):
@@ -227,8 +257,8 @@ class Building(pygame.sprite.Sprite):
             selected_unit.mouse_x, selected_unit.mouse_y = building.bay_dict[building.number_of_units_in_hq]
             selected_unit.moving = True
 
-
 # ____BUILDINGS____
+
 
 units.append(Lumber(500, 200))
 unit_bar = SomeBar()
@@ -236,7 +266,7 @@ unit_bar = SomeBar()
 
 # init map from file
 load_map()
-# init map placement from file
+# init map from file
 
 while True:
 
