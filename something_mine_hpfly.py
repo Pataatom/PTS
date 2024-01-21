@@ -1,8 +1,9 @@
 import pygame
 import random
+
 # ____BASIC_SHIT____(VAR_INIT)
 pygame.init()
-width, height = 1000, 700
+width, height = 1200, 700
 screen = pygame.display.set_mode((width, height))
 clock = pygame.time.Clock()
 units = []
@@ -11,8 +12,34 @@ selected_unit = None
 scout_basic_image_path_01 = "my_shit/Units/Scout/scout_basic_1.png"
 lumber_basic_image_path_01 = "my_shit/Units/Lumber/Lumber Basic.png"
 WHITE = (255, 255, 255)
+# groups
+tree_group = pygame.sprite.Group()
+rock_group = pygame.sprite.Group()
+buildings_group = pygame.sprite.Group()
+# groups
+
 # ____BASIC_SHIT____(VAR_INIT)
 
+# ____INIT_MAP_SPRITES____
+def load_map():
+    with open("my_shit/Tree an nature/tree_placement.txt", "r") as file:
+        for line in file:
+            place_x, place_y = map(int, line.strip('()\n').split(', '))
+            tree = Tree(place_x, place_y)
+            tree_group.add(tree)
+    with open("my_shit/Rocks/rock_placement.txt", "r") as file:
+        for line in file:
+            place_x, place_y = map(int, line.strip('()\n').split(', '))
+            rock = NormalRock(place_x, place_y)
+            tree_group.add(rock)
+    with open("my_shit/Buildings/building_placement.txt", "r") as file:
+        for line in file:
+            place_cord, type_of_building = line.split(" - ")
+            type_of_building = type_of_building.strip(" \n")
+            place_x, place_y = map(int, place_cord.strip("()\n").split(", "))
+            building = Building(place_x, place_y, type_of_building)
+            buildings_group.add(building)
+# ____INIT_MAP_SPRITES____
 
 # ____UNITS_BUILDING_AND_SHIT_MENU____
 class SomeBar:
@@ -20,7 +47,7 @@ class SomeBar:
         self.height = 45
         self.x = 0
         self.y = height - self.height
-        self.color = (0, 0, 0)
+        self.color = (57, 60, 61)
         self.rect = pygame.Rect(self.x, self.y, width, height - self.height)
         # ____scout____
         self.scout = pygame.image.load(scout_basic_image_path_01).convert_alpha()
@@ -31,8 +58,8 @@ class SomeBar:
 
     def draw_unit_bar(self):
         pygame.draw.rect(screen, self.color, self.rect)
-        if unit_bar.scout_selected:
-            pygame.draw.rect(screen, (255, 255, 255), unit_bar.scout_rect)
+        if self.scout_selected:
+            pygame.draw.rect(screen, (255, 255, 255), self.scout_rect)
         screen.blit(self.scout_transformed, self.scout_rect)
 # ____UNITS_BUILDING_AND_SHIT_MENU____
 
@@ -48,6 +75,7 @@ class Scout:
         self.mouse_x = 0
         self.mouse_y = 0
         self.hit_something = False
+        self.first_axis = None
         self.state_dict = {
             "up": self.image,
             "down": pygame.transform.rotate(self.image, 180),
@@ -55,11 +83,9 @@ class Scout:
             "right": pygame.transform.rotate(self.image, 270)
         }
 
-    def auto_movement(self, target_x, target_y):
+    def auto_movement(self, target_x, target_y, first_axis = "x"):
         global selected_unit
-        distance_x = abs(target_x - self.rect.centerx)
-        distance_y = abs(target_y - self.rect.centery)
-        if distance_x <= distance_y:
+        if first_axis == "x":
             if self.rect.centerx > target_x:
                 self.rect.centerx -= self.speed
                 self.state = "left"
@@ -72,7 +98,7 @@ class Scout:
             elif self.rect.centery < target_y:
                 self.rect.centery += self.speed
                 self.state = "down"
-        elif distance_x > distance_y:
+        elif first_axis == "y":
             if self.rect.centery > target_y:
                 self.rect.centery -= self.speed
                 self.state = "up"
@@ -86,9 +112,12 @@ class Scout:
                 self.rect.centerx += self.speed
                 self.state = "right"
 
+
         if self.rect.centerx == target_x and self.rect.centery == target_y:
             self.moving = False
             self.hit_something = False
+            self.first_axis = None
+
         return self.state
 
     def clicked_on_unit(self):
@@ -170,6 +199,30 @@ class Tree(pygame.sprite.Sprite):
 # ____TREE____
 
 
+# ____ROCK____
+class NormalRock(pygame.sprite.Sprite):
+    def __init__(self, place_x, place_y):
+        super().__init__()
+        self.type = "normal"
+        self.place_x = place_x
+        self.place_y = place_y
+        self.normal_rock_list = [
+            pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_1.png").convert_alpha(),
+                                    random.randint(0, 355)),
+            pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_2.png").convert_alpha(),
+                                    random.randint(0, 355)),
+            pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_3.png").convert_alpha(),
+                                    random.randint(0, 355)),
+            pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_4.png").convert_alpha(),
+                                    random.randint(0, 355)),
+            pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_5.png").convert_alpha(),
+                                    random.randint(0, 355)),
+            ]
+        self.image = random.choice(self.normal_rock_list)
+        self.rect = self.image.get_rect(center=(place_x, place_y))
+# ____ROCK____
+
+
 # ____BUILDINGS____
 class Building(pygame.sprite.Sprite):
     def __init__(self, building_x, building_y, type_of_unit):
@@ -204,28 +257,16 @@ class Building(pygame.sprite.Sprite):
             selected_unit.mouse_x, selected_unit.mouse_y = building.bay_dict[building.number_of_units_in_hq]
             selected_unit.moving = True
 
-
 # ____BUILDINGS____
+
 
 units.append(Lumber(500, 200))
 unit_bar = SomeBar()
-tree_group = pygame.sprite.Group()
-buildings_group = pygame.sprite.Group()
+
 
 # init map from file
-with open("my_shit/Tree an nature/tree_placement.txt", "r") as file:
-    for line in file:
-        place_x, place_y = map(int, line.strip('()\n').split(', '))
-        tree = Tree(place_x, place_y)
-        tree_group.add(tree)
-with open("my_shit/Buildings/building_placement.txt", "r") as file:
-    for line in file:
-        place_cord, type_of_building = line.split(" - ")
-        type_of_building = type_of_building.strip(" \n")
-        place_x, place_y = map(int, place_cord.strip("()\n").split(", "))
-        building = Building(place_x, place_y, type_of_building)
-        buildings_group.add(building)
-# init map placement from file
+load_map()
+# init map from file
 
 while True:
 
@@ -242,13 +283,23 @@ while True:
                     if unit.rect.collidepoint(event.pos):
                         unit.clicked_on_unit()
 
+                    # giving direction
                     elif not unit.rect.collidepoint(event.pos) and selected_unit == unit and not building.rect.\
                             collidepoint(event.pos):
                         selected_unit.mouse_x, selected_unit.mouse_y = event.pos
+                        distance_x = abs(selected_unit.mouse_x - selected_unit.rect.centerx)
+                        distance_y = abs(selected_unit.mouse_y - selected_unit.rect.centery)
+                        if distance_x >= distance_y:
+                            selected_unit.first_axis = "x"
+                        elif distance_x <= distance_y:
+                            selected_unit.first_axis = "y"
                         selected_unit.moving = True
-                    elif building.rect.collidepoint(event.pos) and selected_unit == unit:
-                        if building.type == "hq":
-                            building.action_with_hq_and_unit()
+                    # giving direction
+
+                    for building in buildings_group:
+                        if building.rect.collidepoint(event.pos) and selected_unit == unit:
+                            if building.type == "hq":
+                                building.action_with_hq_and_unit()
                             '''
                             if building.number_of_units_in_hq <= 4:
                                 building.number_of_units_in_hq += 1
@@ -311,7 +362,7 @@ while True:
 
         # moving unit to desired pos
         if unit.moving and not unit.hit_something:
-            unit.auto_movement(unit.mouse_x, unit.mouse_y)
+            unit.auto_movement(unit.mouse_x, unit.mouse_y,  unit.first_axis)
         elif unit.moving and unit.hit_something:
             unit.auto_movement(backup_x, backup_y)
         unit.place_on_screen()

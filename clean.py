@@ -47,7 +47,7 @@ class SomeBar:
         self.height = 45
         self.x = 0
         self.y = height - self.height
-        self.color = (0, 0, 0)
+        self.color = (57, 60, 61)
         self.rect = pygame.Rect(self.x, self.y, width, height - self.height)
         # ____scout____
         self.scout = pygame.image.load(scout_basic_image_path_01).convert_alpha()
