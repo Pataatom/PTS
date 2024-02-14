@@ -1,8 +1,9 @@
-This is my biggest project yet, most of the thing you see here come from my head.
-When you have a lil bit more complex questions, chatGPT get lost real fast.
-Not saying this is BIG or what not, I use this project as a motivation on my learning journey.
+This is my take to create a simple RTS game where you need to gather resources, build buildings and defenses, etc.
 
+I started in early July of 2023; it is still work in progress. I take a lot of breaks, so it will take some time until it is done, if ever.
 
-Also, I draw all the stuff you see here.
+I draw all the things that I use, so it doesn't always look perfect, but I like how it looks so far.
 
-(nvm, I am dumb as shit)
+(PTS stands for Programming Time Strategy, which I thought was a fun idea until I realized how much time it would take to implement programming into a control of unit.)
+
+Also, English is my second language, so I am sorry for the mistakes that I made in the comments or this README.
