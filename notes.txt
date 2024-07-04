@@ -1,3 +1,0 @@
-sorry, Přidal jsem default value pro first_axis, protože jsem byl líný vymýšlet, jak by měl jet první pří srážce.
-ale vzhledem tomu, že to druhé(x nebo y) bude vždy nula tak je to asi jedno.
-
