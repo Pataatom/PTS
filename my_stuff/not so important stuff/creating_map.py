@@ -13,15 +13,15 @@ class Tree(pygame.sprite.Sprite):
         self.place_x = place_x
         self.place_y = place_y
         tree_images = [
-            pygame.transform.rotate(pygame.image.load("my_shit/Tree an nature/tree_0.png").convert_alpha(),
+            pygame.transform.rotate(pygame.image.load("my_stuff/Tree an nature/tree_0.png").convert_alpha(),
                                     random.randint(0, 355)),
-            pygame.transform.rotate(pygame.image.load("my_shit/Tree an nature/tree_1.png").convert_alpha(),
+            pygame.transform.rotate(pygame.image.load("my_stuff/Tree an nature/tree_1.png").convert_alpha(),
                                     random.randint(0, 355)),
-            pygame.transform.rotate(pygame.image.load("my_shit/Tree an nature/tree_2.png").convert_alpha(),
+            pygame.transform.rotate(pygame.image.load("my_stuff/Tree an nature/tree_2.png").convert_alpha(),
                                     random.randint(0, 355)),
-            pygame.transform.rotate(pygame.image.load("my_shit/Tree an nature/tree_3.png").convert_alpha(),
+            pygame.transform.rotate(pygame.image.load("my_stuff/Tree an nature/tree_3.png").convert_alpha(),
                                     random.randint(0, 355)),
-            pygame.transform.rotate(pygame.image.load("my_shit/Tree an nature/tree_4.png").convert_alpha(),
+            pygame.transform.rotate(pygame.image.load("my_stuff/Tree an nature/tree_4.png").convert_alpha(),
                                     random.randint(0, 355)),
             ]
         self.image = random.choice(tree_images)
@@ -40,31 +40,31 @@ class Rock(pygame.sprite.Sprite):
         if type == 1:
 
             normal_rock_list = [
-                pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_1.png").convert_alpha(),
+                pygame.transform.rotate(pygame.image.load(r"my_stuff/Rocks/normal_rocks/normal_rock_1.png").convert_alpha(),
                                         random.randint(0, 355)),
-                pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_2.png").convert_alpha(),
+                pygame.transform.rotate(pygame.image.load(r"my_stuff/Rocks/normal_rocks/normal_rock_2.png").convert_alpha(),
                                         random.randint(0, 355)),
-                pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_3.png").convert_alpha(),
+                pygame.transform.rotate(pygame.image.load(r"my_stuff/Rocks/normal_rocks/normal_rock_3.png").convert_alpha(),
                                         random.randint(0, 355)),
-                pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_4.png").convert_alpha(),
+                pygame.transform.rotate(pygame.image.load(r"my_stuff/Rocks/normal_rocks/normal_rock_4.png").convert_alpha(),
                                         random.randint(0, 355)),
-                pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_5.png").convert_alpha(),
+                pygame.transform.rotate(pygame.image.load(r"my_stuff/Rocks/normal_rocks/normal_rock_5.png").convert_alpha(),
                                         random.randint(0, 355)),
             ]
             self.image = random.choice(normal_rock_list)
             self.rect = self.image.get_rect(center=(place_x, place_y))
         elif type == 2:
             steel_rock_list = [
-                pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/steel_rock/steel_rock_1.png").convert_alpha(),
+                pygame.transform.rotate(pygame.image.load(r"my_stuff/Rocks/steel_rock/steel_rock_1.png").convert_alpha(),
                                         random.randint(0, 355)),
-                pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/steel_rock/steel_rock_2.png").convert_alpha(),
+                pygame.transform.rotate(pygame.image.load(r"my_stuff/Rocks/steel_rock/steel_rock_2.png").convert_alpha(),
                                         random.randint(0, 355))
             ]
             self.image = random.choice(steel_rock_list)
             self.rect = self.image.get_rect(center=(place_x, place_y))
         elif type == 3:
             gold_rock_list = [
-                pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/gold_rocks/gold_rock_1.png").convert_alpha(),
+                pygame.transform.rotate(pygame.image.load(r"my_stuff/Rocks/gold_rocks/gold_rock_1.png").convert_alpha(),
                                         random.randint(0, 355))
             ]
             self.image = random.choice(gold_rock_list)
@@ -75,7 +75,7 @@ class HQ(pygame.sprite.Sprite):
         super().__init__()
         self.place_x = place_x
         self.place_y = place_y
-        self.image = pygame.image.load("my_shit/Buildings/HQ.png")
+        self.image = pygame.image.load("my_stuff/Buildings/HQ.png")
         self.rect = self.image.get_rect(center=(place_x, place_y))
 
 
@@ -112,18 +112,18 @@ while True:
                 place_x, place_y = event.pos
                 rock = Rock(place_x, place_y, type_of_rock)
                 rock_group.add(rock)
-                with open("my_shit/Rocks/rock_placement.txt", "a") as file:
+                with open("my_stuff/Rocks/rock_placement.txt", "a") as file:
                     file.write(f"({place_x}, {place_y}) - {type_of_rock} \n")
             if right_mouse_button:
                 # tree removal
                 for tree in tree_group:
                     if tree.rect.collidepoint(event.pos):
                         place_x, place_y = tree.rect.centerx, tree.rect.centery
-                        list_of_trees = open("my_shit/Tree an nature/tree_placement.txt").readlines()
+                        list_of_trees = open("my_stuff/Tree an nature/tree_placement.txt").readlines()
                         tree_group.remove(tree)
                         if f"({place_x}, {place_y})\n" in list_of_trees:
                             list_of_trees.remove(f"({place_x}, {place_y})\n")
-                            with open(r"my_shit/Tree an nature/tree_placement.txt", "w") as f:
+                            with open(r"my_stuff/Tree an nature/tree_placement.txt", "w") as f:
                                 for x in list_of_trees:
                                     f.write(x)
                                     f.close()
@@ -133,11 +133,11 @@ while True:
                     if rock.rect.collidepoint(event.pos):
                         place_x, place_y = rock.rect.centerx, rock.rect.centery
                         key = rock.type
-                        list_of_rocks = open("my_shit/Rocks/rock_placement.txt", "r").readlines()
+                        list_of_rocks = open("my_stuff/Rocks/rock_placement.txt", "r").readlines()
                         rock_group.remove(rock)
                         if f"({place_x}, {place_y}) - {key}\n" in list_of_rocks:
                             list_of_rocks.remove(f"({place_x}, {place_y} - {key})\n")
-                            with open(r"my_shit/Tree an nature/rock_placement.txt", "w") as f:
+                            with open(r"my_stuff/Tree an nature/rock_placement.txt", "w") as f:
                                 for x in list_of_rocks:
                                     f.write(x)
                                     f.close()
@@ -145,7 +145,7 @@ while True:
 
 
                     '''
-                    with open("my_shit/Tree an nature/tree_placement.txt", "r") as f:
+                    with open("my_stuff/Tree an nature/tree_placement.txt", "r") as f:
                         list_of_trees = f.readlines()
                         list_of_trees.remove(f"({place_x}, {place_y})\n")
                         print(list_of_trees)
@@ -161,18 +161,18 @@ while True:
                 '''
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
-                with open("my_shit/Tree an nature/tree_placement.txt", "r") as file:
+                with open("my_stuff/Tree an nature/tree_placement.txt", "r") as file:
                     for line in file:
                         place_x, place_y = map(int, line.strip('()\n').split(', '))
                         tree = Tree(place_x, place_y)
                         tree_group.add(tree)
-                with open("my_shit/Buildings/building_placement.txt", "r") as file:
+                with open("my_stuff/Buildings/building_placement.txt", "r") as file:
                     for line in file:
                         place_cord, type = line.split(" - ")
                         place_x, place_y = map(int, place_cord.strip("()\n").split(", "))
                         hq = HQ(place_x, place_y)
                         building_group.add(hq)
-                with open("my_shit/Rocks/rock_placement.txt", "r") as file:
+                with open("my_stuff/Rocks/rock_placement.txt", "r") as file:
                     for line in file:
                         place_cord, type = line.split(" - ")
                         place_x, place_y = map(int, place_cord.strip("()\n").split(", "))

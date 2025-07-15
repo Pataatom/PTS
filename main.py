@@ -9,8 +9,8 @@ clock = pygame.time.Clock()
 units = []
 units_in_hq = []
 selected_unit = None
-scout_basic_image_path_01 = "my_shit/Units/Scout/scout_basic_1.png"
-lumber_basic_image_path_01 = "my_shit/Units/Lumber/Lumber Basic.png"
+scout_basic_image_path_01 = "my_stuff/Units/Scout/scout_basic_1.png"
+lumber_basic_image_path_01 = "my_stuff/Units/Lumber/Lumber Basic.png"
 WHITE = (255, 255, 255)
 # groups
 tree_group = pygame.sprite.Group()
@@ -22,17 +22,17 @@ buildings_group = pygame.sprite.Group()
 
 # ____INIT_MAP_SPRITES____
 def load_map():
-    with open("my_shit/Tree an nature/tree_placement.txt", "r") as file:
+    with open("my_stuff/Tree an nature/tree_placement.txt", "r") as file:
         for line in file:
             place_x, place_y = map(int, line.strip('()\n').split(', '))
             tree = Tree(place_x, place_y)
             tree_group.add(tree)
-    with open("my_shit/Rocks/rock_placement.txt", "r") as file:
+    with open("my_stuff/Rocks/rock_placement.txt", "r") as file:
         for line in file:
             place_x, place_y = map(int, line.strip('()\n').split(', '))
             rock = NormalRock(place_x, place_y)
             tree_group.add(rock)
-    with open("my_shit/Buildings/building_placement.txt", "r") as file:
+    with open("my_stuff/Buildings/building_placement.txt", "r") as file:
         for line in file:
             place_cord, type_of_building = line.split(" - ")
             type_of_building = type_of_building.strip(" \n")
@@ -183,15 +183,15 @@ class Tree(pygame.sprite.Sprite):
         self.place_x = tree_x
         self.place_y = tree_y
         tree_images = [
-            pygame.transform.rotate(pygame.image.load("my_shit/Tree an nature/tree_0.png").convert_alpha(),
+            pygame.transform.rotate(pygame.image.load("my_stuff/Tree an nature/tree_0.png").convert_alpha(),
                                     random.randint(0, 359)),
-            pygame.transform.rotate(pygame.image.load("my_shit/Tree an nature/tree_1.png").convert_alpha(),
+            pygame.transform.rotate(pygame.image.load("my_stuff/Tree an nature/tree_1.png").convert_alpha(),
                                     random.randint(0, 359)),
-            pygame.transform.rotate(pygame.image.load("my_shit/Tree an nature/tree_2.png").convert_alpha(),
+            pygame.transform.rotate(pygame.image.load("my_stuff/Tree an nature/tree_2.png").convert_alpha(),
                                     random.randint(0, 359)),
-            pygame.transform.rotate(pygame.image.load("my_shit/Tree an nature/tree_3.png").convert_alpha(),
+            pygame.transform.rotate(pygame.image.load("my_stuff/Tree an nature/tree_3.png").convert_alpha(),
                                     random.randint(0, 359)),
-            pygame.transform.rotate(pygame.image.load("my_shit/Tree an nature/tree_4.png").convert_alpha(),
+            pygame.transform.rotate(pygame.image.load("my_stuff/Tree an nature/tree_4.png").convert_alpha(),
                                     random.randint(0, 359)),
             ]
         self.image = random.choice(tree_images)
@@ -207,15 +207,15 @@ class NormalRock(pygame.sprite.Sprite):
         self.place_x = place_x
         self.place_y = place_y
         self.normal_rock_list = [
-            pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_1.png").convert_alpha(),
+            pygame.transform.rotate(pygame.image.load(r"my_stuff/Rocks/normal_rocks/normal_rock_1.png").convert_alpha(),
                                     random.randint(0, 355)),
-            pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_2.png").convert_alpha(),
+            pygame.transform.rotate(pygame.image.load(r"my_stuff/Rocks/normal_rocks/normal_rock_2.png").convert_alpha(),
                                     random.randint(0, 355)),
-            pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_3.png").convert_alpha(),
+            pygame.transform.rotate(pygame.image.load(r"my_stuff/Rocks/normal_rocks/normal_rock_3.png").convert_alpha(),
                                     random.randint(0, 355)),
-            pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_4.png").convert_alpha(),
+            pygame.transform.rotate(pygame.image.load(r"my_stuff/Rocks/normal_rocks/normal_rock_4.png").convert_alpha(),
                                     random.randint(0, 355)),
-            pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_5.png").convert_alpha(),
+            pygame.transform.rotate(pygame.image.load(r"my_stuff/Rocks/normal_rocks/normal_rock_5.png").convert_alpha(),
                                     random.randint(0, 355)),
             ]
         self.image = random.choice(self.normal_rock_list)
@@ -231,7 +231,7 @@ class Building(pygame.sprite.Sprite):
         self.place_y = building_y
         self.type = type_of_unit
         self.building_dict = {
-            "hq": pygame.image.load("my_shit/Buildings/HQ.png"),
+            "hq": pygame.image.load("my_stuff/Buildings/HQ.png"),
 
         }
         self.image = self.building_dict[str(type_of_unit)]

@@ -7,15 +7,15 @@ class Tree(pygame.sprite.Sprite):
         self.place_x = place_x
         self.place_y = place_y
         tree_images = [
-            pygame.transform.rotate(pygame.image.load("my_shit/Tree an nature/tree_0.png").convert_alpha(),
+            pygame.transform.rotate(pygame.image.load("my_stuff/Tree an nature/tree_0.png").convert_alpha(),
                                     random.randint(0, 355)),
-            pygame.transform.rotate(pygame.image.load("my_shit/Tree an nature/tree_1.png").convert_alpha(),
+            pygame.transform.rotate(pygame.image.load("my_stuff/Tree an nature/tree_1.png").convert_alpha(),
                                     random.randint(0, 355)),
-            pygame.transform.rotate(pygame.image.load("my_shit/Tree an nature/tree_2.png").convert_alpha(),
+            pygame.transform.rotate(pygame.image.load("my_stuff/Tree an nature/tree_2.png").convert_alpha(),
                                     random.randint(0, 355)),
-            pygame.transform.rotate(pygame.image.load("my_shit/Tree an nature/tree_3.png").convert_alpha(),
+            pygame.transform.rotate(pygame.image.load("my_stuff/Tree an nature/tree_3.png").convert_alpha(),
                                     random.randint(0, 355)),
-            pygame.transform.rotate(pygame.image.load("my_shit/Tree an nature/tree_4.png").convert_alpha(),
+            pygame.transform.rotate(pygame.image.load("my_stuff/Tree an nature/tree_4.png").convert_alpha(),
                                     random.randint(0, 355)),
             ]
         self.image = random.choice(tree_images)
@@ -27,15 +27,15 @@ class NormalRock(pygame.sprite.Sprite):
         self.place_x = place_x
         self.place_y = place_y
         self.normal_rock_list = [
-            pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_1.png").convert_alpha(),
+            pygame.transform.rotate(pygame.image.load(r"my_stuff/Rocks/normal_rocks/normal_rock_1.png").convert_alpha(),
                                     random.randint(0, 355)),
-            pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_2.png").convert_alpha(),
+            pygame.transform.rotate(pygame.image.load(r"my_stuff/Rocks/normal_rocks/normal_rock_2.png").convert_alpha(),
                                     random.randint(0, 355)),
-            pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_3.png").convert_alpha(),
+            pygame.transform.rotate(pygame.image.load(r"my_stuff/Rocks/normal_rocks/normal_rock_3.png").convert_alpha(),
                                     random.randint(0, 355)),
-            pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_4.png").convert_alpha(),
+            pygame.transform.rotate(pygame.image.load(r"my_stuff/Rocks/normal_rocks/normal_rock_4.png").convert_alpha(),
                                     random.randint(0, 355)),
-            pygame.transform.rotate(pygame.image.load(r"my_shit/Rocks/normal_rocks/normal_rock_5.png").convert_alpha(),
+            pygame.transform.rotate(pygame.image.load(r"my_stuff/Rocks/normal_rocks/normal_rock_5.png").convert_alpha(),
                                     random.randint(0, 355)),
             ]
         self.image = random.choice(self.normal_rock_list)
